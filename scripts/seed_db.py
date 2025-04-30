@@ -1,7 +1,6 @@
 # scripts/seed_db.py
 import tensorflow as tf
-import numpy as np
-from app.db import create_mnist_table, insert_mnist_data
+from data.db import create_mnist_table, insert_mnist_data
 
 
 def load_mnist_data():

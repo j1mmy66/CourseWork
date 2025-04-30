@@ -1,7 +1,7 @@
-from sklearn.datasets import make_blobs, make_moons, make_circles, load_iris
+from sklearn.datasets import make_blobs, make_moons, make_circles
 from sklearn.decomposition import PCA
 
-from app.db import get_mnist_data
+from data.db import get_mnist_data
 
 
 def load_blobs():

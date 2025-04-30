@@ -1,6 +1,6 @@
 import gradio as gr
 
-from app.css import css
+from interface.css import css
 from interface.func import datasets_funcs, apply_clustering_or_generate
 
 with gr.Blocks(css=css, theme=gr.themes.Soft(

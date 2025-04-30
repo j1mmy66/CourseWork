@@ -1,6 +1,6 @@
-from app.clustering_sklearn import get_default_clusters, perform_clustering, compute_silhouette
-from app.datasets import load_blobs, load_circles, load_mnist_from_db, load_moons
-from app.plot_utils import save_cluster_plot
+from clustering.clustering_sklearn import get_default_clusters, perform_clustering, compute_silhouette
+from data.datasets import load_blobs, load_circles, load_mnist_from_db, load_moons
+from clustering.plot_utils import save_cluster_plot
 from generator.generator import generate_synthetic_data
 
 datasets_funcs = {
