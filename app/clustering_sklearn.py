@@ -7,6 +7,10 @@ from sklearn.cluster import (
 from sklearn.mixture import GaussianMixture
 from sklearn.metrics import silhouette_score
 
+from algorithms.USENC import usenc
+from algorithms.USPEC import uspec
+
+
 def get_default_clusters(dataset_name):
     if dataset_name in ["Blobs", "Iris"]:
         return 3
@@ -17,7 +21,13 @@ def get_default_clusters(dataset_name):
     return 3
 
 def perform_clustering(X, algorithm, n_clusters):
-    if algorithm == "KMeans":
+    if algorithm == "USENC":
+        labels = usenc(X, n_clusters)
+        centers = None
+    elif algorithm == "USPEC":
+        labels = uspec(X, n_clusters)
+        centers = None
+    elif algorithm == "KMeans":
         model = KMeans(n_clusters=n_clusters, random_state=42)
         labels = model.fit_predict(X)
         centers = model.cluster_centers_

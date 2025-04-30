@@ -16,7 +16,7 @@ def load_circles():
     X, y = make_circles(n_samples=300, noise=0.05, factor=0.5, random_state=42)
     return X, y
 
-def load_iris():
+def load_iriss():
     iris = load_iris()
     X = iris.data[:, :2]
     y = iris.target
