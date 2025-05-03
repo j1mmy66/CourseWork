@@ -1,5 +1,6 @@
 
 import matplotlib
+from sklearn.decomposition import PCA
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
@@ -8,6 +9,12 @@ import tempfile
 
 
 def save_cluster_plot(X, labels, algorithm, dataset_name, centers=None, filename="cluster_plot.png"):
+
+    if X.shape[1] != 2:
+        pca = PCA(n_components=2)
+        X = pca.fit_transform(X)
+
+
     plt.figure(figsize=(6, 4))
     plt.scatter(X[:, 0], X[:, 1], c=labels, cmap="viridis", s=30)
     plt.xlabel('Признак 1')
@@ -18,9 +25,7 @@ def save_cluster_plot(X, labels, algorithm, dataset_name, centers=None, filename
 
     plt.title(summary_text)
 
-    if centers is not None:
-        plt.scatter(centers[:, 0], centers[:, 1], marker="x", c="red", s=100, linewidths=3, label="Центры")
-        plt.legend()
+
 
     # Сохранение графика во временную директорию
     img_path = os.path.join(tempfile.gettempdir(), filename)

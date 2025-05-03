@@ -14,10 +14,13 @@ def load_moons():
 
 def load_circles():
     X, y = make_circles(n_samples=300, noise=0.05, factor=0.5, random_state=42)
+
     return X, y
 
 def load_digit():
-    X, y = load_digits()
+    digits = load_digits()
+    X, y = digits.data, digits.target
+
     return X, y
 
 

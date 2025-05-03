@@ -16,7 +16,7 @@ def get_default_clusters(dataset_name):
         return 3
     elif dataset_name in ["Moons", "Circles"]:
         return 2
-    elif dataset_name in ["MNIST"]:
+    elif dataset_name in ["Digits"]:
         return 10
     return 3
 

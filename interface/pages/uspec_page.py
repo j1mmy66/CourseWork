@@ -4,7 +4,7 @@ from interface.func import datasets_funcs, apply_clustering_or_generate
 
 
 def build_uspec_page():
-    with gr.TabItem("USENC/USPEC") as uspec_page:
+    with gr.TabItem("usenc/uspec") as uspec_page:
         with gr.Group(elem_classes="custom-card"):
             gr.Markdown("## Кластеризация USPEC/USENC", elem_classes="card-title")
 

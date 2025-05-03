@@ -4,6 +4,7 @@ from interface.describtions.algorithm_describtion import ALGO_INFO_MD
 from interface.describtions.dataset_describtion import DATASET_INFO_MD
 from interface.describtions.generator_describtion import GENERATOR_INFO_MD
 from interface.describtions.metrics_describtion import METRIC_INFO_MD
+from interface.describtions.pca_description import PCA_INFO_MD
 from interface.func import datasets_funcs, apply_clustering_or_generate
 
 
@@ -55,9 +56,15 @@ def build_sklearn_page():
                 elem_classes="custom-dropdown"
             )
             run_button_sk = gr.Button("Кластеризовать", elem_classes="hover-button")
+
+            with gr.Accordion("ℹ️ Отрисовка графиков", open=False, elem_id="metrics-help"):
+                gr.Markdown(PCA_INFO_MD)
+
             output_image_sk = gr.Image(label="Результат", type="filepath", elem_classes="custom-image")
+
             with gr.Accordion("ℹ️ Что означают метрики?", open=False, elem_id="metrics-help"):
                 gr.Markdown(METRIC_INFO_MD)
+
             metrics_dataframe_sk = gr.Dataframe(
                 headers=["Метрика", "Значение"],
                 datatype=["str", "number"],

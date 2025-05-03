@@ -3,7 +3,7 @@ import numpy as np
 from clustering.clustering_sklearn import get_default_clusters, perform_clustering
 from clustering.metrics import compute_davies_bouldin, compute_calinski_harabasz, compute_adjusted_rand, compute_nmi, \
     compute_hcv, compute_silhouette
-from data.datasets import load_blobs, load_circles, load_mnist_from_db, load_moons
+from data.datasets import load_blobs, load_circles, load_mnist_from_db, load_moons, load_digit
 from clustering.plot_utils import save_cluster_plot
 from generator.generator import generate_synthetic_data
 import pandas as pd
@@ -12,7 +12,8 @@ datasets_funcs = {
     "Blobs": load_blobs,
     "Moons": load_moons,
     "Circles": load_circles,
-    "MNIST": load_mnist_from_db
+    "Digits": load_digit
+    #"MNIST": load_mnist_from_db
 }
 
 
@@ -45,7 +46,7 @@ def apply_clustering_or_generate(
         ["Silhouette", silhouette if silhouette is not None else np.nan],
         ["Davies–Bouldin", davies_bouldin if davies_bouldin is not None else np.nan],
         ["Calinski–Harabasz", calinski_harabasz if calinski_harabasz is not None else np.nan],
-        ["Adjusted Rand", adjusted_rand],
+        ["Adjusted Rand", adjusted_rand],
         ["NMI", nmi],
         ["Homogeneity", homogeneity],
         ["Completeness", completeness],
