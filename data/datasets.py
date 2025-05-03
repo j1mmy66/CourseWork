@@ -1,4 +1,4 @@
-from sklearn.datasets import make_blobs, make_moons, make_circles
+from sklearn.datasets import make_blobs, make_moons, make_circles, load_digits
 from sklearn.decomposition import PCA
 
 from data.db import get_mnist_data
@@ -14,6 +14,10 @@ def load_moons():
 
 def load_circles():
     X, y = make_circles(n_samples=300, noise=0.05, factor=0.5, random_state=42)
+    return X, y
+
+def load_digit():
+    X, y = load_digits()
     return X, y
 
 

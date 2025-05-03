@@ -5,7 +5,7 @@ from sklearn.cluster import (
     SpectralClustering, MeanShift
 )
 from sklearn.mixture import GaussianMixture
-from sklearn.metrics import silhouette_score
+
 
 from algorithms.USENC import usenc
 from algorithms.USPEC import uspec

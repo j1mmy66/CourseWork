@@ -1,9 +1,12 @@
-from clustering.clustering_sklearn import get_default_clusters, perform_clustering, compute_silhouette
+import numpy as np
+
+from clustering.clustering_sklearn import get_default_clusters, perform_clustering
 from clustering.metrics import compute_davies_bouldin, compute_calinski_harabasz, compute_adjusted_rand, compute_nmi, \
     compute_hcv, compute_silhouette
 from data.datasets import load_blobs, load_circles, load_mnist_from_db, load_moons
 from clustering.plot_utils import save_cluster_plot
 from generator.generator import generate_synthetic_data
+import pandas as pd
 
 datasets_funcs = {
     "Blobs": load_blobs,
@@ -38,5 +41,25 @@ def apply_clustering_or_generate(
     nmi = compute_nmi(y_true, labels)
     homogeneity, completeness, v_measure = compute_hcv(y_true, labels)
 
-    return save_cluster_plot(X, labels, algorithm, dataset_name, centers, "cluster_plot.png")
+    metrics = [
+        ["Silhouette", silhouette if silhouette is not None else np.nan],
+        ["Davies–Bouldin", davies_bouldin if davies_bouldin is not None else np.nan],
+        ["Calinski–Harabasz", calinski_harabasz if calinski_harabasz is not None else np.nan],
+        ["Adjusted Rand", adjusted_rand],
+        ["NMI", nmi],
+        ["Homogeneity", homogeneity],
+        ["Completeness", completeness],
+        ["V‑Measure", v_measure]
+    ]
+    metrics_df = pd.DataFrame(metrics, columns=["Метрика", "Значение"])
+    metrics_df["Значение"] = metrics_df["Значение"].apply(
+        lambda x: "—" if x is None or (isinstance(x, float) and np.isnan(x))
+        else f"{x:.3f}"
+    )
+
+    plot_path = save_cluster_plot(
+        X, labels, algorithm, dataset_name, centers, "cluster_plot.png"
+    )
+
+    return plot_path, metrics_df
 

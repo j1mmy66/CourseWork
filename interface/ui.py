@@ -1,7 +1,11 @@
 import gradio as gr
 
+from interface.describtions.algorithm_describtion import ALGO_INFO_MD
 from interface.css import css
+from interface.describtions.dataset_describtion import DATASET_INFO_MD
+from interface.describtions.generator_describtion import GENERATOR_INFO_MD
 from interface.func import datasets_funcs, apply_clustering_or_generate
+from interface.describtions.metrics_describtion import METRIC_INFO_MD
 
 with gr.Blocks(css=css, theme=gr.themes.Soft(
         font=["Arial", "sans-serif"],  # основной шрифт
@@ -22,6 +26,12 @@ with gr.Blocks(css=css, theme=gr.themes.Soft(
                 )
 
                 # готовый датасет
+                with gr.Accordion("ℹ️ Описание датасетов", open = False, elem_id="data-help") as dataset_info_acc:
+                    gr.Markdown(DATASET_INFO_MD)
+
+                with gr.Accordion("ℹ️ Описание генератора", open = False, elem_id="generator-help", visible=False) as generator_info_acc:
+                    gr.Markdown(GENERATOR_INFO_MD)
+
                 dataset_dropdown_sklearn = gr.Dropdown(
                     label="Выберите датасет",
                     choices=list(datasets_funcs.keys()),
@@ -37,6 +47,8 @@ with gr.Blocks(css=css, theme=gr.themes.Soft(
                 alpha_slider_sk = gr.Slider(0.01, 0.99, value=0.5, step=0.01, label="alpha", visible=False)
 
                 # выбор алгоритма и кнопки
+                with gr.Accordion("ℹ️ Описание алгоритмов", open = False, elem_id="algo-help"):
+                    gr.Markdown(ALGO_INFO_MD)
                 algorithm_dropdown_sk = gr.Dropdown(
                     label="Выберите алгоритм",
                     choices=[
@@ -48,13 +60,23 @@ with gr.Blocks(css=css, theme=gr.themes.Soft(
                 )
                 run_button_sk = gr.Button("Кластеризовать", elem_classes="hover-button")
                 output_image_sk = gr.Image(label="Результат", type="filepath", elem_classes="custom-image")
-
+                with gr.Accordion("ℹ️ Что означают метрики?", open=False, elem_id="metrics-help"):
+                    gr.Markdown(METRIC_INFO_MD)
+                metrics_dataframe_sk = gr.Dataframe(
+                    headers=["Метрика", "Значение"],
+                    datatype=["str", "number"],
+                    label="Метрики кластеризации",
+                    interactive=False,
+                    elem_classes="metrics-table"
+                )
 
                 # переключение видимости
                 def update_visibility_sklearn(mode):
                     show_gen = (mode == "Сгенерировать данные")
                     return (
+                        gr.update(visible=not show_gen), # dataset_info
                         gr.update(visible=not show_gen),  # dataset
+                        gr.update(visible=show_gen), # gen_info
                         gr.update(visible=show_gen),  # N
                         gr.update(visible=show_gen),  # V
                         gr.update(visible=show_gen),  # K*
@@ -66,10 +88,14 @@ with gr.Blocks(css=css, theme=gr.themes.Soft(
                 mode_selector_sklearn.change(
                     fn=update_visibility_sklearn,
                     inputs=[mode_selector_sklearn],
-                    outputs=[
-                        dataset_dropdown_sklearn,
-                        N_slider_sk, V_slider_sk, K_slider_sk,
-                        nmin_slider_sk, alpha_slider_sk
+                    outputs=[dataset_info_acc,
+                            dataset_dropdown_sklearn,
+                             generator_info_acc,
+                            N_slider_sk,
+                             V_slider_sk,
+                             K_slider_sk,
+                             nmin_slider_sk,
+                             alpha_slider_sk
                     ]
                 )
 
@@ -83,7 +109,7 @@ with gr.Blocks(css=css, theme=gr.themes.Soft(
                         nmin_slider_sk, alpha_slider_sk,
                         algorithm_dropdown_sk
                     ],
-                    outputs=output_image_sk
+                    outputs=[output_image_sk, metrics_dataframe_sk]
                 )
 
         # ——— USPEC/USENC-секция ———
@@ -140,7 +166,13 @@ with gr.Blocks(css=css, theme=gr.themes.Soft(
                 mode_selector.change(
                     fn=update_visibility,
                     inputs=[mode_selector],
-                    outputs=[dataset_dropdown2, N_slider, V_slider, K_slider, nmin_slider, alpha_slider]
+                    outputs=[
+                             dataset_dropdown2,
+                             N_slider,
+                             V_slider,
+                             K_slider,
+                             nmin_slider,
+                             alpha_slider]
                 )
 
                 # единый callback на кнопку
