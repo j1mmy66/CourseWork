@@ -3,8 +3,9 @@ import numpy as np
 from clustering.clustering_sklearn import get_default_clusters, perform_clustering
 from clustering.metrics import compute_davies_bouldin, compute_calinski_harabasz, compute_adjusted_rand, compute_nmi, \
     compute_hcv, compute_silhouette
-from data.datasets import load_blobs, load_circles, load_mnist_from_db, load_moons, load_digit
+from data.datasets import load_blobs, load_circles,  load_moons, load_digit
 from clustering.plot_utils import save_cluster_plot
+from data.db import insert_history_data
 from generator.generator import generate_synthetic_data
 import pandas as pd
 
@@ -13,7 +14,6 @@ datasets_funcs = {
     "Moons": load_moons,
     "Circles": load_circles,
     "Digits": load_digit
-    #"MNIST": load_mnist_from_db
 }
 
 
@@ -60,6 +60,22 @@ def apply_clustering_or_generate(
 
     plot_path = save_cluster_plot(
         X, labels, algorithm, dataset_name, centers, "cluster_plot.png"
+    )
+
+    metrics_dict = metrics_df.set_index("Метрика")["Значение"].to_dict()
+
+    # --- Вставляем в БД именно эти строки ---
+    insert_history_data(
+        dataset_name,
+        algorithm,
+        metrics_dict["Silhouette"],
+        metrics_dict["Davies–Bouldin"],
+        metrics_dict["Calinski–Harabasz"],
+        metrics_dict["Adjusted Rand"],
+        metrics_dict["NMI"],
+        metrics_dict["Homogeneity"],
+        metrics_dict["Completeness"],
+        metrics_dict["V‑Measure"]
     )
 
     return plot_path, metrics_df

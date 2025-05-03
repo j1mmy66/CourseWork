@@ -9,54 +9,73 @@ def get_connection():
     connection = psycopg2.connect(
         host=os.environ.get("DB_HOST", "localhost"),
         port=os.environ.get("DB_PORT", 5432),
-        database=os.environ.get("DB_NAME", "mnist_db"),
+        database=os.environ.get("DB_NAME", "history"),
         user=os.environ.get("DB_USER", "postgres"),
         password=os.environ.get("DB_PASSWORD", "postgres")
     )
     return connection
 
-def create_mnist_table():
+def create_history_table():
     conn = get_connection()
     cur = conn.cursor()
     cur.execute("""
-    CREATE TABLE IF NOT EXISTS mnist_data (
+    CREATE TABLE IF NOT EXISTS history_data (
         id SERIAL PRIMARY KEY,
-        image_data BYTEA,
-        label INTEGER
+        dataset TEXT,
+        algorithm TEXT,
+        silhouette TEXT,
+        davies_bouldin TEXT,
+        calinski_harabasz TEXT, 
+        adjusted_rand TEXT,
+        nmi TEXT,
+        homogeneity TEXT,
+        completeness TEXT,
+        v_measure TEXT
     );
     """)
     conn.commit()
     cur.close()
     conn.close()
 
-def insert_mnist_data(data):
+def insert_history_data(dataset, algorithm, silhouette, davies_bouldin, calinski_harabasz,
+                        adjusted_rand, nmi, homogeneity, completeness, v_measure):
 
     conn = get_connection()
     cur = conn.cursor()
-    query = "INSERT INTO mnist_data (image_data, label) VALUES %s"
-    execute_values(cur, query, data)
+
+    query = """
+        INSERT INTO history_data (
+            dataset, algorithm, silhouette, davies_bouldin, calinski_harabasz,
+            adjusted_rand, nmi, homogeneity, completeness, v_measure
+        )
+        VALUES %s
+    """
+
+    # Собираем данные в виде списка кортежей (execute_values требует именно такой формат)
+    values = [(
+        dataset, algorithm, silhouette, davies_bouldin, calinski_harabasz,
+        adjusted_rand, nmi, homogeneity, completeness, v_measure
+    )]
+
+    execute_values(cur, query, values)
+
     conn.commit()
     cur.close()
     conn.close()
 
-def get_mnist_data():
+import pandas as pd
+from psycopg2 import sql
 
+def fetch_history_df(limit: int = None) -> pd.DataFrame:
+    """
+    Извлекает таблицу history_data в pandas.DataFrame.
+    """
     conn = get_connection()
-    cur = conn.cursor()
-    cur.execute("SELECT image_data, label FROM mnist_data ORDER BY id ASC;")
-    rows = cur.fetchall()
-    cur.close()
+    # Базовый SQL
+    query = "SELECT * FROM history_data"
+    if limit is not None:
+        query += f" LIMIT {limit}"
+    # pandas сама откроет и закроет курсор
+    df = pd.read_sql_query(query, conn)
     conn.close()
-
-    images = []
-    labels = []
-    for row in rows:
-        image_bytes, label = row
-
-        image = np.frombuffer(image_bytes, dtype=np.uint8).reshape(28, 28)
-
-        images.append(image.flatten())
-        labels.append(label)
-    X = np.array(images)
-    y = np.array(labels)
-    return X, y
+    return df

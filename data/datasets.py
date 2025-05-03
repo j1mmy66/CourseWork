@@ -1,7 +1,7 @@
 from sklearn.datasets import make_blobs, make_moons, make_circles, load_digits
 from sklearn.decomposition import PCA
 
-from data.db import get_mnist_data
+
 
 
 def load_blobs():
@@ -24,13 +24,3 @@ def load_digit():
     return X, y
 
 
-def load_mnist_from_db():
-
-    X, y = get_mnist_data()
-
-    if X.shape[1] != 2:
-        pca = PCA(n_components=2)
-        X_reduced = pca.fit_transform(X)
-    else:
-        X_reduced = X
-    return X_reduced, y
