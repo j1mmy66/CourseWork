@@ -7,7 +7,7 @@ import os
 import tempfile
 
 
-def save_cluster_plot(X, labels, algorithm, dataset_name, centers=None, silhouette=None, filename="cluster_plot.png"):
+def save_cluster_plot(X, labels, algorithm, dataset_name, centers=None, filename="cluster_plot.png"):
     plt.figure(figsize=(6, 4))
     plt.scatter(X[:, 0], X[:, 1], c=labels, cmap="viridis", s=30)
     plt.xlabel('Признак 1')
@@ -15,10 +15,7 @@ def save_cluster_plot(X, labels, algorithm, dataset_name, centers=None, silhouet
 
     unique_labels = set(labels)
     summary_text = f"Алгоритм: {algorithm}\nДатасет: {dataset_name}\nКластеров: {len(unique_labels - {-1})}"
-    if silhouette is not None:
-        summary_text += f"\nSilhouette: {silhouette:.2f}"
-    else:
-        summary_text += "\nSilhouette: N/A"
+
     plt.title(summary_text)
 
     if centers is not None:

@@ -58,8 +58,4 @@ def perform_clustering(X, algorithm, n_clusters):
 
     return labels, centers
 
-def compute_silhouette(X, labels):
-    unique_labels = set(labels)
-    if len(unique_labels - {-1}) > 1:
-        return silhouette_score(X, labels)
-    return None
+
