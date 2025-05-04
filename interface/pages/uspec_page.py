@@ -53,6 +53,10 @@ def build_uspec_page():
                 value="USPEC",
                 elem_classes="custom-dropdown"
             )
+
+            with gr.Accordion(label = "ℹ️ Максимальное время работы алгоритма", open=False):
+                timeout_slider = gr.Slider(minimum=10, maximum=300, step=10, value=60, label="Тайм-аут (секунд)")
+
             run_button2 = gr.Button("Кластеризовать", elem_classes="hover-button")
 
             with gr.Accordion("ℹ️ Отрисовка графиков", open=False, elem_id="metrics-help"):
@@ -107,7 +111,8 @@ def build_uspec_page():
                     mode_selector,
                     dataset_dropdown2,
                     N_slider, V_slider, K_slider, nmin_slider, alpha_slider,
-                    algorithm_dropdown2
+                    algorithm_dropdown2,
+                    timeout_slider
                 ],
                 outputs=[output_image2, metrics_dataframe_sk]
             )

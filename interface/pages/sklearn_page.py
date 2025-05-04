@@ -55,6 +55,9 @@ def build_sklearn_page():
                 value="KMeans",
                 elem_classes="custom-dropdown"
             )
+            with gr.Accordion(label = "ℹ️ Максимальное время работы алгоритма", open=False):
+                timeout_slider = gr.Slider(minimum=10, maximum=300, step=10, value=60, label="Тайм-аут (секунд)")
+
             run_button_sk = gr.Button("Кластеризовать", elem_classes="hover-button")
 
             with gr.Accordion("ℹ️ Отрисовка графиков", open=False, elem_id="metrics-help"):
@@ -111,7 +114,8 @@ def build_sklearn_page():
                     dataset_dropdown_sklearn,
                     N_slider_sk, V_slider_sk, K_slider_sk,
                     nmin_slider_sk, alpha_slider_sk,
-                    algorithm_dropdown_sk
+                    algorithm_dropdown_sk,
+                    timeout_slider
                 ],
                 outputs=[output_image_sk, metrics_dataframe_sk]
             )
