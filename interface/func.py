@@ -27,12 +27,12 @@ def apply_clustering_or_generate(
 ):
     if source == "Сгенерировать данные":
         X, y_true = generate_synthetic_data(N, V, K_star, n_min, alpha)
+        n_clusters = K_star
+        dataset_name = "Synthetic_data"
     else:
         X, y_true = datasets_funcs[dataset_name]()
-    if source == "Сгенерировать данные":
-        n_clusters = K_star
-    else:
         n_clusters = get_default_clusters(dataset_name)
+
     labels, centers = perform_clustering(X, algorithm, n_clusters)
     # Внутренние метрики (без y_true)
     silhouette = compute_silhouette(X, labels)
