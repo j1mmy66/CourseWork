@@ -5,7 +5,7 @@ from interface.describtions.dataset_describtion import DATASET_INFO_MD
 from interface.describtions.generator_describtion import GENERATOR_INFO_MD
 from interface.describtions.metrics_describtion import METRIC_INFO_MD
 from interface.describtions.pca_description import PCA_INFO_MD
-from interface.func import datasets_funcs, apply_clustering_or_generate
+from interface.func import datasets_funcs, apply_clustering_or_generate, save_apply_clustering_or_generate
 
 
 def build_sklearn_page():
@@ -105,7 +105,7 @@ def build_sklearn_page():
 
             # привязка кнопок
             run_button_sk.click(
-                fn=apply_clustering_or_generate,
+                fn=save_apply_clustering_or_generate,
                 inputs=[
                     mode_selector_sklearn,
                     dataset_dropdown_sklearn,

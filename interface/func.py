@@ -8,6 +8,8 @@ from clustering.plot_utils import save_cluster_plot
 from data.db import insert_history_data
 from generator.generator import generate_synthetic_data
 import pandas as pd
+from concurrent.futures import ProcessPoolExecutor, TimeoutError
+import time
 
 datasets_funcs = {
     "Blobs": load_blobs,
@@ -79,4 +81,26 @@ def apply_clustering_or_generate(
     )
 
     return plot_path, metrics_df
+
+executor = ProcessPoolExecutor(max_workers=1)
+
+def save_apply_clustering_or_generate(
+        source: str,
+        dataset_name: str,
+        N: int, V: int, K_star: int, n_min: int, alpha: float,
+        algorithm: str,
+        timeout_sec=20
+):
+    future = executor.submit(apply_clustering_or_generate, source, dataset_name, N, V, K_star, n_min, alpha, algorithm)
+    try:
+        # ждём результат до timeout_sec секунд
+        plot_path, df = future.result(timeout=timeout_sec)
+        return plot_path, df
+    except TimeoutError:
+        # попытаемся отменить и вернуть сообщение
+        future.cancel()
+        return None, pd.DataFrame()
+
+
+
 
