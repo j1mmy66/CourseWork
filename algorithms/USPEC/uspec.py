@@ -3,7 +3,7 @@ from scipy.spatial.distance import cdist
 from scipy.sparse import csr_matrix
 from sklearn.cluster import KMeans
 
-from algorithms.USPEC.USPEC import pdist2_fast
+from algorithms.USPEC.pdist2_fast import pdist2_fast
 
 
 def uspec(fea, Ks, distance='euclidean', p=1000, Knn=5, maxTcutKmIters=100, cntTcutKmReps=3):

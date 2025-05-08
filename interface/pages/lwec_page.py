@@ -2,16 +2,16 @@ import gradio as gr
 
 from interface.describtions.dataset_describtion import DATASET_INFO_MD
 from interface.describtions.generator_describtion import GENERATOR_INFO_MD
+from interface.describtions.lwec_description import LWEC_INFO_MD
 from interface.describtions.metrics_describtion import METRIC_INFO_MD
 from interface.describtions.pca_description import PCA_INFO_MD
-from interface.describtions.uspec_describtion import USPEC_INFO_MD
-from interface.func import datasets_funcs, apply_clustering_or_generate, save_apply_clustering_or_generate
+from interface.func import apply_clustering_or_generate, datasets_funcs, save_apply_clustering_or_generate
 
 
-def build_uspec_page():
-    with gr.TabItem("usenc/uspec") as uspec_page:
+def build_lwec_page():
+    with gr.TabItem("lwec") as uspec_page:
         with gr.Group(elem_classes="custom-card"):
-            gr.Markdown("## Кластеризация USPEC/USENC", elem_classes="card-title")
+            gr.Markdown("## Кластеризация LWEC", elem_classes="card-title")
 
             # выбор режима: датасет или генерация
             mode_selector = gr.Radio(
@@ -45,12 +45,12 @@ def build_uspec_page():
 
 
             with gr.Accordion("ℹ️ Описание алгоритмов", open=False, elem_id="algo-help"):
-                gr.Markdown(USPEC_INFO_MD)
+                gr.Markdown(LWEC_INFO_MD)
             # выбор алгоритма и кнопка
             algorithm_dropdown2 = gr.Dropdown(
                 label="Выберите алгоритм",
-                choices=["USPEC", "USENC"],
-                value="USPEC",
+                choices=["LWGP", "LWEA"],
+                value="LWEA",
                 elem_classes="custom-dropdown"
             )
 

@@ -8,7 +8,7 @@ import os
 import tempfile
 
 
-def save_cluster_plot(X, labels, algorithm, dataset_name, centers=None, filename="cluster_plot.png"):
+def save_cluster_plot(X, labels, algorithm, dataset_name, filename="cluster_plot.png"):
 
     if X.shape[1] != 2:
         pca = PCA(n_components=2)

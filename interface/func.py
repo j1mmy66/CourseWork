@@ -1,6 +1,6 @@
 import numpy as np
 
-from clustering.clustering_sklearn import get_default_clusters, perform_clustering
+from clustering.clustering import get_default_clusters, perform_clustering
 from clustering.metrics import compute_davies_bouldin, compute_calinski_harabasz, compute_adjusted_rand, compute_nmi, \
     compute_hcv, compute_silhouette
 from data.datasets import load_blobs, load_circles,  load_moons, load_digit
@@ -33,7 +33,7 @@ def apply_clustering_or_generate(
         X, y_true = datasets_funcs[dataset_name]()
         n_clusters = get_default_clusters(dataset_name)
 
-    labels, centers = perform_clustering(X, algorithm, n_clusters)
+    labels = perform_clustering(X, algorithm, n_clusters)
     # Внутренние метрики (без y_true)
     silhouette = compute_silhouette(X, labels)
     davies_bouldin = compute_davies_bouldin(X, labels)
@@ -61,7 +61,7 @@ def apply_clustering_or_generate(
     )
 
     plot_path = save_cluster_plot(
-        X, labels, algorithm, dataset_name, centers, "cluster_plot.png"
+        X, labels, algorithm, dataset_name,  "cluster_plot.png"
     )
 
     metrics_dict = metrics_df.set_index("Метрика")["Значение"].to_dict()
@@ -96,10 +96,18 @@ def save_apply_clustering_or_generate(
         # ждём результат до timeout_sec секунд
         plot_path, df = future.result(timeout=timeout_sec)
         return plot_path, df
-    except TimeoutError:
+    except TimeoutError as t:
         # попытаемся отменить и вернуть сообщение
         future.cancel()
+
+
+
         return None, pd.DataFrame()
+    except Exception as e:
+        future.cancel()
+
+        return None, pd.DataFrame()
+
 
 
 

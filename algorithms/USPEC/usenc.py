@@ -3,7 +3,7 @@ from scipy.sparse import csr_matrix
 from sklearn.cluster import KMeans
 from scipy.sparse import diags
 
-from algorithms.USPEC.USPEC import uspec
+from algorithms.USPEC.uspec import uspec
 
 
 def usenc(fea, k, M=20, distance='euclidean', p=1000, Knn=5, bcsLowK=20, bcsUpK=60):
