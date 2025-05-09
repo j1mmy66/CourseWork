@@ -6,6 +6,7 @@ from sklearn.cluster import (
 )
 from sklearn.mixture import GaussianMixture
 
+from algorithms.ACMK.acmk import acmk_clustering
 from algorithms.LWEC.lwea import do_lwea
 from algorithms.LWEC.lwgp import do_lwgp
 from algorithms.USPEC.usenc import usenc
@@ -59,6 +60,8 @@ def perform_clustering(X, algorithm, n_clusters):
 
     elif algorithm == "LWGP":
         labels = do_lwgp(X, n_clusters)
+    elif algorithm == "ACMK":
+        labels, _ = acmk_clustering(X, n_clusters)
     else:
         labels = np.zeros(X.shape[0])
 
