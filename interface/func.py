@@ -1,3 +1,6 @@
+import os
+import tempfile
+
 import numpy as np
 
 from clustering.clustering import get_default_clusters, perform_clustering
@@ -102,11 +105,11 @@ def save_apply_clustering_or_generate(
 
 
 
-        return None, pd.DataFrame()
+        return "pic/timeout1.png", pd.DataFrame()
     except Exception as e:
         future.cancel()
 
-        return None, pd.DataFrame()
+        return "pic/error.png", pd.DataFrame()
 
 
 
