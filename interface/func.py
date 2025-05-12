@@ -2,6 +2,7 @@ import os
 import tempfile
 
 import numpy as np
+from fontTools.misc.cython import returns
 
 from clustering.clustering import get_default_clusters, perform_clustering
 from clustering.metrics import compute_davies_bouldin, compute_calinski_harabasz, compute_adjusted_rand, compute_nmi, \
@@ -105,7 +106,13 @@ def save_apply_clustering_or_generate(
 
 
 
+
+
         return "pic/timeout1.png", pd.DataFrame()
+
+    except ValueError:
+
+        return "pic/invalid_input.png", pd.DataFrame()
     except Exception as e:
         future.cancel()
 
